@@ -1,23 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فرم دستور پرداخت</title>
     <style>
+        /* Apply a modern font and style reset */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .form-container, .review-container {
-            display: none;
-            margin-top: 20px;
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
         }
-        .form-container.active, .review-container.active {
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
             display: block;
+            color: #555;
         }
-        button {
-            margin: 10px 0;
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #3b82f6;
+            background-color: #fff;
+            outline: none;
+        }
+
+        button, input[type="submit"] {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover, input[type="submit"]:hover {
+            background-color: #2563eb;
+        }
+
+        .review-container button {
+            width: 48%;
+            margin-right: 2%;
+            margin-left: 2%;
+        }
+
+        /* For responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
         }
     </style>
     <script>
@@ -112,38 +178,39 @@
     </script>
 </head>
 <body>
-    <h1>فرم دستور پرداخت</h1>
+    <div class="container">
+        <h1>فرم دستور پرداخت</h1>
 
-    <!-- Form submission for user d -->
-    <div class="form-container active">
-        <form id="form" onsubmit="event.preventDefault(); submitForm();">
-            <label for="date">تاریخ :</label><br>
-            <input type="date" id="date" required><br><br>
+        <!-- Form submission for user d -->
+        <div class="form-container active">
+            <form id="form" onsubmit="event.preventDefault(); submitForm();">
+                <label for="date">تاریخ :</label>
+                <input type="date" id="date" required>
 
-            <label for="who">نام طرف حساب :</label><br>
-            <input type="text" id="who" required><br><br>
+                <label for="who">نام طرف حساب :</label>
+                <input type="text" id="who" required>
 
-            <label for="amount">مبلغ :</label><br>
-            <input type="number" id="amount" required><br><br>
+                <label for="amount">مبلغ :</label>
+                <input type="number" id="amount" required>
 
-            <label for="reason">بابت :</label><br>
-            <textarea id="reason" required></textarea><br><br>
+                <label for="reason">بابت :</label>
+                <textarea id="reason" required></textarea>
 
-            <label for="signature">امضا دیجیتال :</label><br>
-            <input type="text" id="signature" required><br><br>
+                <label for="signature">امضا دیجیتال :</label>
+                <input type="text" id="signature" required>
 
-            <input type="submit" value="Submit Form">
-        </form>
+                <input type="submit" value="ثبت فرم">
+            </form>
+        </div>
+
+        <!-- Review section for a/b/c -->
+        <div class="review-container">
+            <h3 id="review-stage">Reviewer A Review</h3>
+            <pre id="review-details"></pre>
+
+            <button onclick="handleReview('accept')">تایید</button>
+            <button onclick="handleReview('reject')">رد</button>
+        </div>
     </div>
-
-    <!-- Review section for a/b/c -->
-    <div class="review-container">
-        <h3 id="review-stage">Reviewer A Review</h3>
-        <pre id="review-details"></pre>
-
-        <button onclick="handleReview('accept')">Accept</button>
-        <button onclick="handleReview('reject')">Reject</button>
-    </div>
-
 </body>
 </html>
