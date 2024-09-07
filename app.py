@@ -32,6 +32,10 @@ def send_telegram_message(chat_id, text):
     return response.json()
 
 # Dashboard for all reviewers to see the history of forms
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html', forms=forms)
