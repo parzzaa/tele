@@ -40,15 +40,11 @@ def dashboard():
 @app.route('/submit', methods=['POST'])
 def submit_form():
     form_data = request.json  # Extract submitted form data
-    submitter_chat_id = request.headers.get('X-Telegram-Chat-Id')  # Ensure this header exists
-    if not submitter_chat_id:
-        return jsonify({"error": "Submitter Chat ID not provided"}), 400
 
     form_id = len(forms) + 1  # Simple form ID generation
 
-    # Store the form with the submitter ID, form data, and initial review stage
+    # Store the form with the form data and initial review stage
     forms[form_id] = {
-        'submitter': submitter_chat_id,
         'data': form_data,
         'stage': 'a',  # Starts with reviewer 'a'
         'review_comments': [],
@@ -104,11 +100,9 @@ def submit_review(form_id):
     elif decision == 'reject':
         form['status'] = 'Rejected'
         form['stage'] = 'completed'
-        send_telegram_message(form['submitter'], f"Form rejected at stage {form['stage']}.")
         return jsonify({"message": f"Form rejected at stage {form['stage']}"})
 
     return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
