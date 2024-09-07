@@ -45,7 +45,7 @@
             };
 
             // Send form data to the backend
-            fetch('http://0.0.0.0:10000/submit', {
+            fetch('https://tele-f3f3.onrender.com/submit', {  // Update with your Render URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -77,7 +77,7 @@
 
         // Handle review decision
         function handleReview(decision) {
-            fetch(`http://0.0.0.0:10000/review/${formData.stage}`, {
+            fetch(`https://tele-f3f3.onrender.com/review/${formData.stage}`, {  // Update with your Render URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
