@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Dashboard</title>
+</head>
+<body>
+    <h1>Review Dashboard</h1>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Form ID</th>
+            <th>Submitter</th>
+            <th>Stage</th>
+            <th>Status</th>
+            <th>Comments</th>
+        </tr>
+        {% for form_id, form in forms.items() %}
+        <tr>
+            <td>{{ form_id }}</td>
+            <td>{{ form['submitter'] }}</td>
+            <td>{{ form['stage'] }}</td>
+            <td>{{ form['status'] }}</td>
+            <td>
+                <ul>
+                {% for comment in form['review_comments'] %}
+                    <li><strong>Stage {{ comment.stage }}:</strong> {{ comment.comment }} (Decision: {{ comment.decision }})</li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

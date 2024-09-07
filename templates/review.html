@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Form</title>
+</head>
+<body>
+    <h1>Review Form</h1>
+
+    <p><strong>Date:</strong> {{ form['data']['date'] }}</p>
+    <p><strong>Who:</strong> {{ form['data']['who'] }}</p>
+    <p><strong>Amount:</strong> {{ form['data']['amount'] }}</p>
+    <p><strong>Reason:</strong> {{ form['data']['reason'] }}</p>
+    <p><strong>Signature:</strong> {{ form['data']['signature'] }}</p>
+
+    <form action="{{ url_for('submit_review', form_id=form_id) }}" method="POST">
+        <label for="comment">Optional Comment:</label><br>
+        <textarea name="comment" id="comment" rows="4" cols="50"></textarea><br><br>
+
+        <button type="submit" name="decision" value="accept">Accept</button>
+        <button type="submit" name="decision" value="reject">Reject</button>
+    </form>
+</body>
+</html>
