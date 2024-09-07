@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for cross-origin requests
 
 # Replace these with your bot token and chat IDs
-BOT_TOKEN = '7293431359:AAH3QLzmiod9Lf1SQ0bkqgHzk1rMxVLqqOQ'  # Keep this secure
+BOT_TOKEN = '7293431359:AAH3QLzmiod9Lf1SQ0bkqgHzk1rMxVLqqOQ'  # Fetch from environment
 CHAT_ID_A = '101883112'
 CHAT_ID_B = '109566532'
 CHAT_ID_C = '85607859'
