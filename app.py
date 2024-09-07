@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Replace these with your bot token and chat IDs
-BOT_TOKEN = os.getenv('7293431359:AAH3QLzmiod9Lf1SQ0bkqgHzk1rMxVLqqOQ')
+BOT_TOKEN = '7293431359:AAH3QLzmiod9Lf1SQ0bkqgHzk1rMxVLqqOQ'
 CHAT_ID_A = '101883112'
 CHAT_ID_B = '109566532'
 CHAT_ID_C = '85607859'
