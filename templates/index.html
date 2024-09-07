@@ -1,54 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Submission</title>
-  <script>
-    async function submitForm() {
-      const formData = {
-        date: document.getElementById('date').value,
-        who: document.getElementById('who').value,
-        amount: document.getElementById('amount').value,
-        reason: document.getElementById('reason').value,
-        signature: document.getElementById('signature').value
-      };
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container, .review-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .form-container.active, .review-container.active {
+            display: block;
+        }
+        button {
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        let formData = {}; // Holds form data
+        let stage = 'd';   // Tracks the current reviewer stage (d -> a -> b -> c)
 
-      try {
-        const response = await fetch('/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
-        const result = await response.json();
-        alert(result.status);
-      } catch (error) {
-        console.error('Error submitting form:', error);
-      }
-    }
-  </script>
+        // Initialize Telegram Web App
+        window.Telegram.WebApp.ready();
+
+        // Handle form submission from user d
+        function submitForm() {
+            const date = document.getElementById('date').value;
+            const who = document.getElementById('who').value;
+            const amount = document.getElementById('amount').value;
+            const reason = document.getElementById('reason').value;
+            const signature = document.getElementById('signature').value;
+
+            formData = {
+                date: date,
+                who: who,
+                amount: amount,
+                reason: reason,
+                signature: signature,
+                stage: 'a' // Initially send to reviewer 'a'
+            };
+
+            // Send form data to the backend
+            fetch('https://tele-f3f3.onrender.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            }).then(response => response.json())
+              .then(data => {
+                alert(data.message);  // Notify the user that the form was submitted
+                showReviewerForm();    // Move to the review form display
+              }).catch(error => {
+                alert("Error submitting form.");
+                console.error('Error:', error);
+              });
+        }
+
+        // Display the reviewer approval form
+        function showReviewerForm() {
+            document.querySelector('.form-container').classList.remove('active');
+            document.querySelector('.review-container').classList.add('active');
+            document.getElementById('review-stage').innerText = `Reviewer ${formData.stage.toUpperCase()} Review`;
+            document.getElementById('review-details').innerText = `
+                Date: ${formData.date}
+                Who: ${formData.who}
+                Amount: ${formData.amount}
+                Reason: ${formData.reason}
+                Signature: ${formData.signature}
+            `;
+        }
+
+        // Handle review decision
+        function handleReview(decision) {
+            fetch(`https://tele-f3f3.onrender.com/review/${formData.stage}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    decision: decision
+                })
+            }).then(response => response.json())
+              .then(data => {
+                if (data.nextStage) {
+                    formData.stage = data.nextStage;  // Move to the next reviewer stage
+                    showReviewerForm();               // Update the form display for the next stage
+                } else {
+                    alert(data.message);              // Notify the user that the review process is complete
+                    resetForm();                      // Reset the form for a new submission
+                }
+              }).catch(error => {
+                alert("Error in review process.");
+                console.error('Error:', error);
+              });
+        }
+
+        // Reset the form to allow a new submission
+        function resetForm() {
+            document.querySelector('.review-container').classList.remove('active');
+            document.querySelector('.form-container').classList.add('active');
+            document.getElementById('form').reset();
+            formData = {};
+            stage = 'd';
+        }
+
+    </script>
 </head>
 <body>
-<h1>Form Submission</h1>
-<form onsubmit="event.preventDefault(); submitForm();">
-  <label for="date">Date:</label><br>
-  <input type="date" id="date" required><br><br>
+    <h1>Telegram Web App: Form Submission & Review</h1>
 
-  <label for="who">Who:</label><br>
-  <input type="text" id="who" required><br><br>
+    <!-- Form submission for user d -->
+    <div class="form-container active">
+        <form id="form" onsubmit="event.preventDefault(); submitForm();">
+            <label for="date">Date:</label><br>
+            <input type="date" id="date" required><br><br>
 
-  <label for="amount">Amount:</label><br>
-  <input type="number" id="amount" required><br><br>
+            <label for="who">Who:</label><br>
+            <input type="text" id="who" required><br><br>
 
-  <label for="reason">Reason:</label><br>
-  <textarea id="reason" required></textarea><br><br>
+            <label for="amount">Amount:</label><br>
+            <input type="number" id="amount" required><br><br>
 
-  <label for="signature">Signature:</label><br>
-  <input type="text" id="signature" required><br><br>
+            <label for="reason">Reason:</label><br>
+            <textarea id="reason" required></textarea><br><br>
 
-  <input type="submit" value="Submit Form">
-</form>
+            <label for="signature">Digital Signature:</label><br>
+            <input type="text" id="signature" required><br><br>
+
+            <input type="submit" value="Submit Form">
+        </form>
+    </div>
+
+    <!-- Review section for a/b/c -->
+    <div class="review-container">
+        <h3 id="review-stage">Reviewer A Review</h3>
+        <pre id="review-details"></pre>
+
+        <button onclick="handleReview('accept')">Accept</button>
+        <button onclick="handleReview('reject')">Reject</button>
+    </div>
+
 </body>
 </html>
