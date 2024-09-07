@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Dashboard</title>
+    <title>پنل کاربری</title>
 </head>
 <body>
-    <h1>Review Dashboard</h1>
+    <h1>پنل کاربری</h1>
 
     <table border="1" cellpadding="10">
         <tr>
-            <th>Form ID</th>
-            <th>Submitter</th>
-            <th>Stage</th>
-            <th>Status</th>
-            <th>Comments</th>
+            <th>شماره سند</th>
+            <th>درخواست دهنده</th>
+            <th>مرحله</th>
+            <th>وضعیت</th>
+            <th>توضیحات</th>
         </tr>
         {% for form_id, form in forms.items() %}
         <tr>

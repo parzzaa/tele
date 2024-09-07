@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App Form</title>
+    <title>فرم دستور پرداخت</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,24 +112,24 @@
     </script>
 </head>
 <body>
-    <h1>Telegram Web App: Form Submission & Review</h1>
+    <h1>فرم دستور پرداخت</h1>
 
     <!-- Form submission for user d -->
     <div class="form-container active">
         <form id="form" onsubmit="event.preventDefault(); submitForm();">
-            <label for="date">Date:</label><br>
+            <label for="date">تاریخ :</label><br>
             <input type="date" id="date" required><br><br>
 
-            <label for="who">Who:</label><br>
+            <label for="who">نام طرف حساب :</label><br>
             <input type="text" id="who" required><br><br>
 
-            <label for="amount">Amount:</label><br>
+            <label for="amount">مبلغ :</label><br>
             <input type="number" id="amount" required><br><br>
 
-            <label for="reason">Reason:</label><br>
+            <label for="reason">بابت :</label><br>
             <textarea id="reason" required></textarea><br><br>
 
-            <label for="signature">Digital Signature:</label><br>
+            <label for="signature">امضا دیجیتال :</label><br>
             <input type="text" id="signature" required><br><br>
 
             <input type="submit" value="Submit Form">
