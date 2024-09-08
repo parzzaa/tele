@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فرم دستور پرداخت</title>
     <style>
-        /* Apply a modern font and style reset */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f9;
@@ -79,6 +78,10 @@
             margin-left: 2%;
         }
 
+        .review-container {
+            display: none;
+        }
+
         /* For responsive design */
         @media (max-width: 768px) {
             .container {
@@ -89,6 +92,7 @@
     <script>
         let formData = {}; // Holds form data
         let stage = 'd';   // Tracks the current reviewer stage (d -> a -> b -> c)
+        let hasReviewCase = false; // Flag to track whether there's a case to review
 
         // Initialize Telegram Web App
         window.Telegram.WebApp.ready();
@@ -120,6 +124,7 @@
             }).then(response => response.json())
               .then(data => {
                 alert(data.message);  // Notify the user that the form was submitted
+                hasReviewCase = true;
                 showReviewerForm();    // Move to the review form display
               }).catch(error => {
                 alert("Error submitting form.");
@@ -130,14 +135,16 @@
         // Display the reviewer approval form
         function showReviewerForm() {
             document.querySelector('.form-container').classList.remove('active');
-            document.querySelector('.review-container').classList.add('active');
-            document.getElementById('review-stage').innerText = `Reviewer ${formData.stage.toUpperCase()} Review`;
+            if (hasReviewCase) {
+                document.querySelector('.review-container').classList.add('active');
+            }
+            document.getElementById('review-stage').innerText = `مرحله بررسی: ${formData.stage.toUpperCase()}`;
             document.getElementById('review-details').innerText = `
-                Date: ${formData.date}
-                Who: ${formData.who}
-                Amount: ${formData.amount}
-                Reason: ${formData.reason}
-                Signature: ${formData.signature}
+                تاریخ: ${formData.date}
+                نام طرف حساب: ${formData.who}
+                مبلغ: ${formData.amount}
+                بابت: ${formData.reason}
+                امضا دیجیتال: ${formData.signature}
             `;
         }
 
@@ -173,8 +180,15 @@
             document.getElementById('form').reset();
             formData = {};
             stage = 'd';
+            hasReviewCase = false;
         }
 
+        // Hide review section initially if no review case
+        window.addEventListener('DOMContentLoaded', (event) => {
+            if (!hasReviewCase) {
+                document.querySelector('.review-container').style.display = 'none';
+            }
+        });
     </script>
 </head>
 <body>
@@ -205,7 +219,7 @@
 
         <!-- Review section for a/b/c -->
         <div class="review-container">
-            <h3 id="review-stage">Reviewer A Review</h3>
+            <h3 id="review-stage">مرحله بررسی</h3>
             <pre id="review-details"></pre>
 
             <button onclick="handleReview('accept')">تایید</button>
