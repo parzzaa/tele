@@ -27,8 +27,8 @@ def send_telegram_message(chat_id, text):
         response = requests.post(url, json=payload)
         response.raise_for_status()  # Raises an error for bad responses
     except requests.exceptions.RequestException as e:
-        print(f"Error sending message to chat ID {chat_id}: {e}")
-        return {"error": "Failed to send message"}
+        print(f"مشکلی در ارسال پیام به این آیدی به وجود آمده است {chat_id}: {e}")
+        return {"خطا": "عدم ارسال پیام"}
     return response.json()
 
 # Dashboard for all reviewers to see the history of forms
@@ -57,15 +57,15 @@ def submit_form():
 
     # Send review link to reviewer 'a'
     review_link = f"https://tele-f3f3.onrender.com/review_form/{form_id}"  # Update with your app's URL
-    send_telegram_message(CHAT_ID_A, f"New form submitted for review.\n\n[Review the form]({review_link})")
+    send_telegram_message(CHAT_ID_A, f"درخواست پرداخت جدیدی به ثبت رسیده است.\n\n[مشاهده درخواست]({review_link})")
 
-    return jsonify({"message": "Form submitted and sent to reviewer A", "nextStage": "a"})
+    return jsonify({"پیام": "فرم ثبت شد وبرای خانوم عبدی جهت بازبینی ارسال شده است", "مرحله بعد": "مرضیه عبدی"})
 
 # Route to render the review form for reviewers
 @app.route('/review_form/<int:form_id>', methods=['GET'])
 def review_form(form_id):
     if form_id not in forms:
-        return "Form not found", 404
+        return "درخواست پرداخت یافت نشد", 404
 
     form = forms[form_id]
     return render_template('review.html', form=form, form_id=form_id)
@@ -74,7 +74,7 @@ def review_form(form_id):
 @app.route('/submit_review/<int:form_id>', methods=['POST'])
 def submit_review(form_id):
     if form_id not in forms:
-        return "Form not found", 404
+        return "درخواست پرداخت یافت نشد", 404
 
     form = forms[form_id]
     decision = request.form['decision']  # Either 'accept' or 'reject'
@@ -91,20 +91,20 @@ def submit_review(form_id):
     if form['stage'] == 'a' and decision == 'accept':
         form['stage'] = 'b'
         review_link = f"https://tele-f3f3.onrender.com/review_form/{form_id}"  # Update with your app's URL
-        send_telegram_message(CHAT_ID_B, f"Form approved by A. [Review the form]({review_link})")
+        send_telegram_message(CHAT_ID_B, f"دستور پرداخت توسط خانوم مرضیه عبدی تایید شد. [مشاهده درخواست]({review_link})")
     elif form['stage'] == 'b' and decision == 'accept':
         form['stage'] = 'c'
         review_link = f"https://tele-f3f3.onrender.com/review_form/{form_id}"  # Update with your app's URL
-        send_telegram_message(CHAT_ID_C, f"Form approved by B. [Review the form]({review_link})")
+        send_telegram_message(CHAT_ID_C, f"دستور پرداخت توسط امین صالحی تایید شد. [مشاهده درخواست]({review_link})")
     elif form['stage'] == 'c' and decision == 'accept':
         form['status'] = 'Approved'
         form['stage'] = 'completed'
-        send_telegram_message(CHAT_ID_A, "Form fully approved by all reviewers.")
-        send_telegram_message(CHAT_ID_B, "Form fully approved by all reviewers.")
+        send_telegram_message(CHAT_ID_A, "درخواست از جانب تمامی افراد تایید شده است")
+        send_telegram_message(CHAT_ID_B, "درخواست از جانب تمامی افراد تایید شده است")
     elif decision == 'reject':
         form['status'] = 'Rejected'
         form['stage'] = 'completed'
-        return jsonify({"message": f"Form rejected at stage {form['stage']}"})
+        return jsonify({"message": f"درخواست از جانب ایشان رد شده است {form['stage']}"})
 
     return redirect(url_for('dashboard'))
 
